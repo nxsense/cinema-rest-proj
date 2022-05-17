@@ -5,10 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static cinema.Cinema.getAllSeats;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+
+import java.util.*;
 
 @RestController
 public class CinemaController {
@@ -54,6 +52,24 @@ public class CinemaController {
         }
         return new ResponseEntity<>(Map.of("error", "Wrong token!"), HttpStatus.BAD_REQUEST);
     }
+    @PostMapping("/stats")
+        public ResponseEntity<?> stats (@RequestParam(required = false) String password){
+        if (password != null && password.equals("super_secret")){
+            Map<String, Integer> statistics = new HashMap<>();
+            int currentIncome = 0;
+            for (OrderedSeat orderedSeat: cinema.getOrdered_seats()) {
+                currentIncome+=orderedSeat.getTicket().getPrice();
+            }
+            int availaleSeats = cinema.getAvailable_seats().size();
+            int purchasedSeats = cinema.getOrdered_seats().size();
+            statistics.put("current_income", currentIncome);
+            statistics.put("number_of_available_seats", availaleSeats);
+            statistics.put("number_of_purchased_tickets", purchasedSeats);
+            return new ResponseEntity<>(statistics, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(Map.of("error", "The password is wrong!"), HttpStatus.valueOf(401));
+    }
+
 }
 
 
