@@ -1,5 +1,7 @@
 package cinema;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,23 +9,32 @@ public class Cinema {
     private int total_rows;
     private int total_columns;
     private List<Seat> available_seats;
+    @JsonIgnore
+    private List<OrderedSeat> ordered_seats;
 
     public Cinema(int total_rows, int total_columns, List<Seat> available_seats) {
         this.total_rows = total_rows;
         this.total_columns = total_columns;
         this.available_seats = available_seats;
+        this.ordered_seats = new ArrayList<>();
     }
 
-    public Cinema getAllSeats() {
-        int total_rows = 9;
-        int total_columns = 9;
+    public static Cinema getAllSeats(int rows, int columns) {
         List<Seat> seats = new ArrayList<>();
-        for (int row = 1; row <= total_rows; row++) {
-            for (int column = 1; column <= total_columns; column++) {
+        for (int row = 1; row <= rows; row++) {
+            for (int column = 1; column <= columns; column++) {
                 seats.add(new Seat(row, column));
             }
         }
-        return new Cinema(total_rows, total_columns, seats);
+        return new Cinema(rows, columns, seats);
+    }
+
+    public List<OrderedSeat> getOrdered_seats() {
+        return ordered_seats;
+    }
+
+    public void setOrdered_seats(List<OrderedSeat> ordered_seats) {
+        this.ordered_seats = ordered_seats;
     }
 
     public int getTotal_rows() {

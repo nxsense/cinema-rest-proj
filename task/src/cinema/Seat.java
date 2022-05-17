@@ -35,5 +35,20 @@ public class Seat {
         this.price = price;
     }
 
+    @Override
+    public int hashCode() {
+        int result = row;
+        result = 31 * result + column;
+        return result;
+    }
 
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this) return true;
+        if(obj ==null || obj.getClass() != getClass()) return false;
+
+        Seat s = (Seat) obj;
+        if(row != s.row) return false;
+        return column == s.column;
+    }
 }
